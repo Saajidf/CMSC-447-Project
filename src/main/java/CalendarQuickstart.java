@@ -7,10 +7,12 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.ValueRange;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,8 +21,8 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class SheetsQuickstart {
-    private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
+public class CalendarQuickstart {
+    private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
@@ -28,7 +30,7 @@ public class SheetsQuickstart {
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
-    private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     /**
@@ -39,7 +41,7 @@ public class SheetsQuickstart {
      */
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
-        InputStream in = SheetsQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -52,29 +54,32 @@ public class SheetsQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    /**
-     * Prints the names and majors of students in a sample spreadsheet:
-     * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-     */
     public static void main(String... args) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        final String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-        final String range = "Class Data!A2:E";
-        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-        ValueRange response = service.spreadsheets().values()
-                .get(spreadsheetId, range)
+
+        // List the next 10 events from the primary calendar.
+        DateTime now = new DateTime(System.currentTimeMillis());
+        Events events = service.events().list("primary")
+                .setMaxResults(10)
+                .setTimeMin(now)
+                .setOrderBy("startTime")
+                .setSingleEvents(true)
                 .execute();
-        List<List<Object>> values = response.getValues();
-        if (values == null || values.isEmpty()) {
-            System.out.println("No data found.");
+        List<Event> items = events.getItems();
+        if (items.isEmpty()) {
+            System.out.println("No upcoming events found.");
         } else {
-            System.out.println("Name, Major");
-            for (List row : values) {
-                // Print columns A and E, which correspond to indices 0 and 4.
-                System.out.printf("%s, %s\n", row.get(0), row.get(4));
+            System.out.println("Upcoming events");
+            for (Event event : items) {
+                DateTime start = event.getStart().getDateTime();
+                if (start == null) {
+                    start = event.getStart().getDate();
+                }
+                System.out.printf("%s (%s)\n", event.getSummary(), start);
             }
         }
     }
