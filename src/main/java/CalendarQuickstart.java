@@ -13,13 +13,27 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.EventAttendee;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.io.File;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class CalendarQuickstart {
     private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
@@ -30,9 +44,10 @@ public class CalendarQuickstart {
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
-    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-
+    private static final String SCHEDULE_FILE_PATH = "src/main/resources/schedule.json";
+    private List<String> events;
     /**
      * Creates an authorized Credential object.
      * @param HTTP_TRANSPORT The network HTTP Transport.
@@ -42,6 +57,9 @@ public class CalendarQuickstart {
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
         InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if (in == null) {
+            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+        }
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -54,12 +72,66 @@ public class CalendarQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public static void main(String... args) throws IOException, GeneralSecurityException {
+    public static Calendar readJsonInsert(Calendar service) throws FileNotFoundException, IOException, ParseException{
+        JSONParser parser = new JSONParser();
+
+        File file = new File(SCHEDULE_FILE_PATH);
+
+        JSONArray a = (JSONArray) parser.parse(new FileReader(SCHEDULE_FILE_PATH));
+
+        for (Object o : a) {
+            JSONObject newEvent = (JSONObject) o;
+
+            String summary = (String) newEvent.get("summary");
+            String location = (String) newEvent.get("location");
+            String description = (String) newEvent.get("location");
+
+            Event event = new Event().setSummary(summary)
+                                    .setLocation(location)
+                                    .setDescription(description);
+
+            String startTime = (String) newEvent.get("start");
+            String endTime = (String) newEvent.get("end");
+
+            DateTime startDateTime = new DateTime(startTime);
+            DateTime endDateTime = new DateTime(endTime);
+
+            EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("America/New_York");
+
+            EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("America/New_York");
+
+            event.setStart(start);
+            event.setEnd(end);
+
+            JSONArray jsonAttendees = (JSONArray) newEvent.get("attendee");
+
+            List<EventAttendee> attendees = new ArrayList<>();
+
+            for (Object c : jsonAttendees){
+                String newAttendee = (String) c;
+                attendees.add(new EventAttendee().setEmail(newAttendee));
+            }
+
+            event.setAttendees(attendees);
+            event = service.events().insert("primary", event).execute();
+        }
+        
+    return service;
+    }
+
+    public static void main(String... args) throws IOException, GeneralSecurityException, ParseException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+
+
+    service = readJsonInsert(service);
 
         // List the next 10 events from the primary calendar.
         DateTime now = new DateTime(System.currentTimeMillis());
