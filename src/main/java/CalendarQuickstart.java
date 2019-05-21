@@ -73,22 +73,27 @@ public class CalendarQuickstart {
     }
 
     public static Calendar readJsonInsert(Calendar service) throws FileNotFoundException, IOException, ParseException{
+
         JSONParser parser = new JSONParser();
 
         File file = new File(SCHEDULE_FILE_PATH);
 
         JSONArray a = (JSONArray) parser.parse(new FileReader(SCHEDULE_FILE_PATH));
-
         for (Object o : a) {
+
+            //id = last attendee email + start time - special characters and upper case
+            //"example sbrin@example.com" + "2019-05-20T09:00:00-04:00" =
+            //           sbrinexamplecom201905200900000400
+            String id = new String();
             JSONObject newEvent = (JSONObject) o;
 
             String summary = (String) newEvent.get("summary");
             String location = (String) newEvent.get("location");
-            String description = (String) newEvent.get("location");
+            //String description = (String) newEvent.get("description");
 
             Event event = new Event().setSummary(summary)
-                                    .setLocation(location)
-                                    .setDescription(description);
+                                    .setLocation(location);
+                                    //.setDescription(description);
 
             String startTime = (String) newEvent.get("start");
             String endTime = (String) newEvent.get("end");
@@ -113,6 +118,7 @@ public class CalendarQuickstart {
 
             for (Object c : jsonAttendees){
                 String newAttendee = (String) c;
+                id = (String) c;
                 attendees.add(new EventAttendee().setEmail(newAttendee));
             }
 
@@ -121,6 +127,32 @@ public class CalendarQuickstart {
         }
         
     return service;
+    }
+
+    public static void showId(Calendar service) throws IOException{
+        DateTime now = new DateTime(System.currentTimeMillis());
+        Events events = service.events().list("primary")
+                .setTimeMin(now)
+                .setOrderBy("startTime")
+                .setSingleEvents(true)
+                .execute();
+        List<Event> items = events.getItems();
+        if (!items.isEmpty()) 
+            for (Event event : items) {
+                DateTime start = event.getStart().getDateTime();
+                if (start == null) {
+                    start = event.getStart().getDate();
+                }
+
+                String newId = event.getId();
+                event.setDescription(newId);
+
+                Event updatedEvent = service.events().update("primary", event.getId(), event).execute();
+            }
+    }
+    
+    public static void deleteEvent(Calendar service, String eventId) throws IOException{
+        service.events().delete("primary", eventId).execute();
     }
 
     public static void main(String... args) throws IOException, GeneralSecurityException, ParseException {
@@ -132,6 +164,7 @@ public class CalendarQuickstart {
 
 
     service = readJsonInsert(service);
+    showId(service);
 
         // List the next 10 events from the primary calendar.
         DateTime now = new DateTime(System.currentTimeMillis());
