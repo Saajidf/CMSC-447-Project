@@ -1,28 +1,253 @@
 [
 	{
-		"summary":"Google I/O 2015",
-		"location":"800 Howard St., San Francisco, CA 94103",
+		"summary":"Shift 1",
+		"location":"Location 1",
         "description":"testing",
-		"start":"2019-05-20T09:00:00-04:00",
-		"end":"2019-05-20T17:00:00-04:00",
+		"start":"2019-05-22T00:00:00-04:00",
+		"end":"2019-05-22T08:00:00-04:00",
 		"attendee":[
-			"lpage@example.com",
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-22T08:00:00-04:00",
+		"end":"2019-05-22T16:00:00-04:00",
+		"attendee":[
 			"sbrin@example.com"
 		]
 
 	}
 
 	{
-		"summary":"Google I/O LMAO",
-		"location":"800 Howard St., San Francisco, CA 94103",
-        "description":"testing2",
-		"start":"2019-05-21T09:00:00-04:00",
-		"end":"2019-05-21T17:00:00-04:00",
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-22T16:00:00-04:00",
+		"end":"2019-05-22T23:59:00-04:00",
 		"attendee":[
-			"lpage@example.com",
 			"sbrin@example.com"
 		]
 
 	}
 
+	{
+		"summary":"Shift 1",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-23T00:00:00-04:00",
+		"end":"2019-05-23T08:00:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-23T08:00:00-04:00",
+		"end":"2019-05-23T16:00:00-04:00",
+		"attendee":[
+			"sbrin@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-23T16:00:00-04:00",
+		"end":"2019-05-23T23:59:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 1",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-24T00:00:00-04:00",
+		"end":"2019-05-24T08:00:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-24T08:00:00-04:00",
+		"end":"2019-05-24T16:00:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-24T16:00:00-04:00",
+		"end":"2019-05-24T23:59:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 1",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-25T00:00:00-04:00",
+		"end":"2019-05-25T08:00:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-25T08:00:00-04:00",
+		"end":"2019-05-25T16:00:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-25T16:00:00-04:00",
+		"end":"2019-05-25T23:59:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 1",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-26T00:00:00-04:00",
+		"end":"2019-05-26T08:00:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-26T08:00:00-04:00",
+		"end":"2019-05-26T16:00:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-26T16:00:00-04:00",
+		"end":"2019-05-26T23:59:00-04:00",
+		"attendee":[
+			"sbrin@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 1",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-27T00:00:00-04:00",
+		"end":"2019-05-27T08:00:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-27T08:00:00-04:00",
+		"end":"2019-05-27T16:00:00-04:00",
+		"attendee":[
+			"lpage@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-27T16:00:00-04:00",
+		"end":"2019-05-27T23:59:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 1",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-28T00:00:00-04:00",
+		"end":"2019-05-28T08:00:00-04:00",
+		"attendee":[
+			"sbrin@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 2",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-28T08:00:00-04:00",
+		"end":"2019-05-28T16:00:00-04:00",
+		"attendee":[
+			"sbrin@example.com"
+		]
+
+	}
+
+	{
+		"summary":"Shift 3",
+		"location":"Location 1",
+        "description":"testing",
+		"start":"2019-05-28T16:00:00-04:00",
+		"end":"2019-05-28T23:59:00-04:00",
+		"attendee":[
+			"moon@example.com"
+		]
+
+	}
 ]
